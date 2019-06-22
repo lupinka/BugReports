@@ -18,28 +18,21 @@ void saveLog(logSystem* logs,char newlog[]){
         fseek(file,0L,SEEK_END);
         fileSize=ftell(file);
     }
-    printf("%d\n",fileSize);
     fclose(file);
 
-    if(fileSize+strlen(newlog)>16/*1024*/){
-        for(int i=logs->maxNumber;i>=0;i--)
+    if(fileSize+strlen(newlog)>logs->maxSize){
+        for(int i=logs->maxNumber-1;i>0;i--)
         {
             int pre=i-1;
-            if(pre==-1){
-                pre=logs->maxNumber-1;
-            }
             strcpy(nazwabuf,nazwa);
             strcpy(nazwabuf2,nazwa);
             char ii[5];
             char previous[5];
             sprintf(ii,"%d",i);
             sprintf(previous,"%d",pre);
-
-            //file = fopen(nazwa,"r");
-            printf("previous:%s ii:%s\n",previous,ii);
-            file = fopen(strcat(nazwabuf2,previous),"a+");
+            if(pre==0) file = fopen(nazwabuf2,"a+");
+            else file = fopen(strcat(nazwabuf2,previous),"a+");
             file2=fopen(strcat(nazwabuf,ii),"w");
-            printf("%s %s %s\n",nazwa,nazwabuf,nazwabuf2);
             if(file!=NULL) {
                 while ((ch = fgetc(file)) != EOF)
                     fputc(ch, file2);
@@ -56,5 +49,4 @@ void saveLog(logSystem* logs,char newlog[]){
         fprintf(file, "%s\n", newlog);
         fclose(file);
     }
-    printf("%s\n",nazwa);
 }
