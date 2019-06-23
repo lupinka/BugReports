@@ -7,8 +7,8 @@ typedef struct{
     int maxNumber;
     char fileName[];
 }logSystem;
-void hello(void);
 void saveLog(logSystem*,char[]);
+void initWithDefault(logSystem* logs);
 
 
 #endif //BUGREPORTS_LIBRARY_H

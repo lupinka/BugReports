@@ -2,8 +2,12 @@
 
 #include <stdio.h>
 #include <string.h>
-void hello(void) {
-    printf("Hello, World!\n");
+
+void initWithDefault(logSystem* logs)
+{
+    logs->maxSize=16000;
+    logs->maxNumber=5;
+    strcpy(logs->fileName,"log");
 }
 
 void saveLog(logSystem* logs,char newlog[]){
@@ -11,6 +15,8 @@ void saveLog(logSystem* logs,char newlog[]){
     char ch;
     char nazwa[10],nazwabuf[10], nazwabuf2[10];
     strcpy(nazwa,logs->fileName);
+
+    //checking the size of log file
     int fileSize;
     file = fopen(nazwa,"r");
     if(file==NULL) fileSize=0;
@@ -20,6 +26,7 @@ void saveLog(logSystem* logs,char newlog[]){
     }
     fclose(file);
 
+    //if new log would make file too long
     if(fileSize+strlen(newlog)>logs->maxSize){
         for(int i=logs->maxNumber-1;i>0;i--)
         {
@@ -44,6 +51,8 @@ void saveLog(logSystem* logs,char newlog[]){
         fprintf(filestart, "%s\n", newlog);
         fclose(filestart);
     }
+
+    //if size is correct
     else {
         file = fopen(nazwa, "a");
         fprintf(file, "%s\n", newlog);
